@@ -2,37 +2,32 @@ import React, { Component } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Note from './components/notes';
 import NoteField from './components/addNote';
+import AppBar from './components/appBar';
 
 class App extends Component{
 
     constructor(props){
         super(props);
         this.state={
-            notes:[
-                {
-                    id: 1,
-                    text: "Hello",
-                    title: "Note 1",
-                },
-                {
-                    id: 2,
-                    text: "Hello",
-                    title: "Note 2",
-                }
-            ]
+            notes:[]
         };
     }
     handleDelete= id=>
     {
         this.setState({notes: this.state.notes.filter(note=> note.id!==id)});
     }
+    handleDeleteAll=()=>{
+        this.setState({notes:[]});
+    }
     handleAdd= note=>   
     {
-        let index=this.state.notes[this.state.notes.length-1].id;
+        let index=0;
+        if(this.state.notes.length!==0)
+            index=this.state.notes[this.state.notes.length-1].id;
         index++;
         let newNote={
             id: index,
-            text: "Hello",
+            text: note.text,
             title: `Note ${index}`,
         }
         var notes=this.state.notes;
@@ -45,7 +40,8 @@ class App extends Component{
         return (
             <Paper>
             <div>
-                <NoteField onClick={this.handleAdd}/>
+                <AppBar/>
+                <NoteField onClick={this.handleAdd} onDelete={this.handleDeleteAll} />
             </div>
             <div>
                 {this.state.notes.map(note=>
